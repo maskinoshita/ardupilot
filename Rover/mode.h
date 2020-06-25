@@ -30,7 +30,8 @@ public:
         RTL          = 11,
         SMART_RTL    = 12,
         GUIDED       = 15,
-        INITIALISING = 16
+        INITIALISING = 16,
+        DRIFT = 20,
     };
 
     // Constructor
@@ -689,3 +690,12 @@ private:
     float _desired_heading_cd;  // latest desired heading (in centi-degrees) from pilot
 };
 
+class ModeDrift : public Mode
+{
+public:
+    uint32_t mode_number() const override { return DRIFT; }
+    const char *name4() const override { return "DRFT"; }
+    void update() override;
+
+    bool is_autopilot_mode() const override { return true; }
+};

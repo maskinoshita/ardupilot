@@ -117,6 +117,7 @@ public:
     friend class ModeSmartRTL;
     friend class ModeFollow;
     friend class ModeSimple;
+    friend class ModeDrift;
 
     friend class RC_Channel_Rover;
     friend class RC_Channels_Rover;
@@ -263,6 +264,7 @@ private:
     ModeSmartRTL mode_smartrtl;
     ModeFollow mode_follow;
     ModeSimple mode_simple;
+    ModeDrift mode_drift;
 
     // cruise throttle and speed learning
     typedef struct {
