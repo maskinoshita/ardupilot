@@ -201,7 +201,7 @@ const AP_Param::Info Rover::var_info[] = {
     // @Description: Driving mode for switch position 4 (1491 to 1620)
     // @Values: 0:Manual,1:Acro,3:Steering,4:Hold,5:Loiter,6:Follow,7:Simple,10:Auto,11:RTL,12:SmartRTL,15:Guided,20:Drift
     // @User: Standard
-    GSCALAR(mode4,           "MODE4",         Mode::Number::MANUAL),
+    GSCALAR(mode4,           "MODE4",         Mode::Number::STEERING), // Mode::Number::MANUAL),
 
     // @Param: MODE5
     // @DisplayName: Mode5
@@ -215,7 +215,7 @@ const AP_Param::Info Rover::var_info[] = {
     // @Description: Driving mode for switch position 6 (1750 to 2049)
     // @Values: 0:Manual,1:Acro,3:Steering,4:Hold,5:Loiter,6:Follow,7:Simple,10:Auto,11:RTL,12:SmartRTL,15:Guided,20:Drift
     // @User: Standard
-    GSCALAR(mode6,           "MODE6",         Mode::Number::MANUAL),
+    GSCALAR(mode6,           "MODE6",         Mode::Number::DRIFT), // Mode::Number::MANUAL),
 
     // @Param: TURN_MAX_G
     // @DisplayName: Turning maximum G force
