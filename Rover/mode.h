@@ -698,4 +698,10 @@ public:
     void update() override;
 
     bool is_autopilot_mode() const override { return true; }
+protected:
+    bool _enter() override;
+private:
+    bool _is_drifting;
+    Quaternion _quat_at_start; // [rad]
+    Matrix3f _rotation_at_start;
 };
