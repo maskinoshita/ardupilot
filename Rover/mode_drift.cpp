@@ -47,14 +47,19 @@ void ModeDrift::update()
     } else {
         if(!_is_drifting) {
             _is_drifting = true;
-            ahrs.get_quat_body_to_ned(_quat_at_start);
-            _quat_at_start.rotation_matrix_norm(_rotation_at_start);
+            //ahrs.get_quat_body_to_ned(_quat_at_start);
+            //_quat_at_start.rotation_matrix_norm(_rotation_at_start);
+            if(!ahrs.get_quaternion(_quat_at_start)) {
+                return;
+            };
             //ahrs.reset_gyro_drift();
             gcs().send_text(MAV_SEVERITY_NOTICE, "Start Drifting");
         }
 
         Quaternion quat_current;
-        ahrs.get_quat_body_to_ned(quat_current);
+        if(!ahrs.get_quaternion(quat_current)) {
+            return;
+        }
 
         const float target_turn_angle = (desired_steering / 4500.0f) * DRIFT_TURN_ANGLE_MAX;
         Quaternion target_quat = _quat_at_start;
@@ -69,7 +74,7 @@ void ModeDrift::update()
         if(mag_diff_yaw >= DRIFT_TURN_RATE) {
             target_turn_rate = steering_direction * DRIFT_TURN_RATE;
         } else {
-            target_turn_rate = steering_direction * mag_diff_yaw; // -diff_yaw
+            target_turn_rate = diff_yaw;
         }
 
         const float steering_out = attitude_control.get_steering_out_rate(
