@@ -25,7 +25,7 @@ void ModeDrift::update()
     // Parameters (Temporary)
     const bool AUTO_THROTTLE_CONTROL = false; // true; // TODO: Unused
     const float STEERING_THRESHOLD = 50.0f; // Start Drift Control when desired_steering <= STEERING_THRESHOLD or STEERING_THRESHOLD <= desired_steering)
-    const float DRIFT_TURN_RATE = radians(30.0f); // Turn rate when steering value max
+    // const float DRIFT_TURN_RATE = radians(30.0f); // Turn rate when steering value max
     const float DRIFT_TURN_ANGLE_MAX = radians(180.0f); // Max drift turn angle from start drifting point  
 
     if(mag_desired_steering <= STEERING_THRESHOLD) {
@@ -38,11 +38,8 @@ void ModeDrift::update()
         float desired_throttle, desired_lateral;
         get_pilot_desired_steering_and_throttle(desired_steering, desired_throttle);
         get_pilot_desired_lateral(desired_lateral);
-
-        // copy RC scaled inputs to outputs
-        g2.motors.set_throttle(desired_throttle);
-        g2.motors.set_steering(desired_steering, false);
-        g2.motors.set_lateral(desired_lateral);
+        set_steering(desired_steering);
+        calc_throttle(desired_speed, true);
         return;
     } else {
         if(!_is_drifting) {
@@ -64,18 +61,16 @@ void ModeDrift::update()
         const float target_turn_angle = (desired_steering / 4500.0f) * DRIFT_TURN_ANGLE_MAX;
         Quaternion target_quat = _quat_at_start;
         target_quat.rotate(Vector3f(0.0f, 0.0f, target_turn_angle));
-        Quaternion diff = quat_current.angular_difference(target_quat);
+        Quaternion diff = target_quat.angular_difference(quat_current);
 
-        const float diff_yaw = diff.get_euler_yaw();
-        const float mag_diff_yaw = (diff_yaw < 0.0f)? -diff_yaw : diff_yaw;
-        const float steering_direction = (diff_yaw < 0.0f)? 1.0f : -1.0f;
+        gcs().send_text(MAV_SEVERITY_NOTICE, "%f, %f, %f, %f",
+          degrees(_quat_at_start.get_euler_yaw()),
+          degrees(target_quat.get_euler_yaw()),
+          degrees(quat_current.get_euler_yaw()),
+          degrees(diff.get_euler_yaw())
+        );
 
-        float target_turn_rate = 0.0;
-        if(mag_diff_yaw >= DRIFT_TURN_RATE) {
-            target_turn_rate = steering_direction * DRIFT_TURN_RATE;
-        } else {
-            target_turn_rate = diff_yaw;
-        }
+        float target_turn_rate = diff.get_euler_yaw();
 
         const float steering_out = attitude_control.get_steering_out_rate(
             target_turn_rate,
