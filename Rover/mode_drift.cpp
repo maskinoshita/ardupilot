@@ -34,15 +34,8 @@ void ModeDrift::update()
             gcs().send_text(MAV_SEVERITY_NOTICE, "Stop Drifting");
         }
 
-        /* --- control same as manual mode --- */
-        float desired_throttle, desired_lateral;
-        get_pilot_desired_steering_and_throttle(desired_steering, desired_throttle);
-        get_pilot_desired_lateral(desired_lateral);
-
-        // copy RC scaled inputs to outputs
-        g2.motors.set_throttle(desired_throttle);
-        g2.motors.set_steering(desired_steering, false);
-        g2.motors.set_lateral(desired_lateral);
+        calc_steering_from_turn_rate(desired_steering, desired_speed, is_negative(desired_speed));
+        calc_throttle(desired_speed, true);
         return;
     } else {
         if(!_is_drifting) {
