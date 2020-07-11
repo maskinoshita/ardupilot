@@ -698,10 +698,21 @@ public:
     void update() override;
 
     bool is_autopilot_mode() const override { return true; }
+
+    float get_steering_out_rate_for_drift(float desired_rate, float lat_accel, float dt);
 protected:
     bool _enter() override;
 private:
     bool _is_drifting;
-    Quaternion _quat_at_start; // [rad]
-    Matrix3f _rotation_at_start;
+    Quaternion _body_quat_at_start;
+    Quaternion _body_quat_ned_at_start;
+
+    uint32_t _last_ms;
+    // float _drift_steer_pid_i;
+    // float _drift_steer_pid_d;
+    // float _drift_last_steer_rate;
+
+    // float _last_lat_accel;
+
+    // inline Vector3f get_rotation_vector_axis_angle(const Vector3f& direction_vec);
 };
