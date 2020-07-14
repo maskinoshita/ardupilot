@@ -399,6 +399,15 @@ public:
 
     // FS options
     AP_Int32 fs_options;
+
+    // control throttle of drift
+    AP_Int8 drift_throttle_control;
+    // steering threshold of drift [0,4500]
+    AP_Float drift_steering_threshold;
+    // max steering angle (rad)
+    AP_Float drift_steering_angle_max;
+    // drift turn angle max [0,pi]
+    AP_Float drift_turn_angle_max;
 };
 
 extern const AP_Param::Info var_info[];

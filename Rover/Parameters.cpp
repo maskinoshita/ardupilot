@@ -636,6 +636,35 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
     // @User: Advanced
     AP_GROUPINFO("FS_OPTIONS", 48, ParametersG2, fs_options, 0),
 
+    // @Param: DRFT_THR_CTRL
+    // @DisplayName: Enable throttle control for drift
+    // @Description: When enabled, auto throttle control for drift
+    // @Values: 0:Disabled, 1:Enabled
+    // @User: Advanced
+    AP_GROUPINFO("DRFT_THR_CTRL", 49, ParametersG2, drift_throttle_control, 1),
+
+    // @Param: DRFT_STR_THRESH
+    // @DisplayName: Steering threshold for drift
+    // @Description: When pilot inputs steering over this threshold [0, 4500], start controlling steering and throttle for drifting.
+    // @Range: 0 4500
+    // @Increment: 1.0
+    // @User: Advanced
+    AP_GROUPINFO("DRFT_STR_THRESH", 50, ParametersG2, drift_steering_threshold, 50.0f),
+
+    // @Param: DRFT_STR_ANGLE
+    // @DisplayName: Steering angle of max steering input
+    // @Description: max steering angle
+    // @Increment: 0.01
+    // @User: Advanced
+    AP_GROUPINFO("DRFT_STR_ANGLE", 51, ParametersG2, drift_steering_angle_max, radians(30.0f)),
+
+    // @Param: DRFT_TURN_ANGLE
+    // @DisplayName: Max turn angle for drift
+    // @Description: When pilot inputs max steering (4500), drift mode control a body angle to this angle from drifting start 
+    // @Increment: 0.01
+    // @User: Advanced
+    AP_GROUPINFO("DRFT_TURN_ANGLE", 52, ParametersG2, drift_turn_angle_max, M_PI_2),
+
     AP_GROUPEND
 };
 
